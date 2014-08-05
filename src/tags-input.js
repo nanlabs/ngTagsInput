@@ -118,7 +118,8 @@ tagsInput.directive('tagsInput', function($timeout, $document, tagsInputConfig) 
         scope: {
             tags: '=ngModel',
             onTagAdded: '&',
-            onTagRemoved: '&'
+            onTagRemoved: '&',
+            tagStyle: '&'
         },
         replace: false,
         transclude: true,
@@ -228,6 +229,17 @@ tagsInput.directive('tagsInput', function($timeout, $document, tagsInputConfig) 
                 });
 
             scope.newTag = { text: '', invalid: null };
+
+            scope.getTagStyles = function(newTag, tagList, index) {
+                var result = [];
+                if (newTag === tagList.selected){
+                    result.push('selected');
+                }
+                if (scope.tagStyle()){
+                    result = result.concat(scope.tagStyle()(newTag, tagList, index));
+                }
+                return result;
+            };
 
             scope.getDisplayText = function(tag) {
                 return safeToString(tag[options.displayProperty]);
