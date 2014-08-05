@@ -1,5 +1,7 @@
 ## 2.1.0 (2014-08-05)
 
+## 2.1.0 (2014-08-05)
+
 #### Bug Fixes
 
 * **autocomplete:** Fix suggestion selection on touch devices ([ef25a555](https://github.com/mbenford/ngTagsInput/commit/ef25a5555f358e9986635826788c2475c9f417ee))
