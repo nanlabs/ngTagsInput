@@ -160,6 +160,10 @@ tagsInput.directive('tagsInput', function($timeout, $document, tagsInputConfig) 
                     addTag: function(tag) {
                         return $scope.tagList.add(tag);
                     },
+                    // Allows add new tags by text
+                    addNewTag: function(text) {
+                        return $scope.tagList.addText(text);
+                    },
                     focusInput: function() {
                         input[0].focus();
                     },

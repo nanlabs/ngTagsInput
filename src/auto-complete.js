@@ -25,8 +25,6 @@
  *                                       becomes empty. The $query variable will be passed to the expression as an empty string.
  * @param {boolean=} {loadOnFocus=false} Flag indicating that the source option will be evaluated when the input element
  *                                       gains focus. The current input value is available as $query.
- * @params {boolean=} {selectFirstItem=false} Flag indicating that the first item from the list will be selected.
- *
  */
 tagsInput.directive('autoComplete', function($document, $timeout, $sce, tagsInputConfig) {
     function SuggestionList(loadFn, options) {
@@ -51,9 +49,6 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, tagsInpu
         };
         self.show = function() {
             self.selected = null;
-            if (options.selectFirstItem) {
-                self.select(0);
-            }
             self.visible = true;
         };
         self.load = function(query, tags) {
@@ -120,8 +115,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, tagsInpu
                 maxResultsToShow: [Number, 10],
                 loadOnDownArrow: [Boolean, false],
                 loadOnEmpty: [Boolean, false],
-                loadOnFocus: [Boolean, false],
-                selectFirstItem: [Boolean, false]
+                loadOnFocus: [Boolean, false]
             });
 
             options = scope.options;
@@ -228,13 +222,31 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, tagsInpu
                             suggestionList.reset();
                             handled = true;
                         }
-                        else if (key === KEYS.enter || key === KEYS.tab) {
+                        else if (key === KEYS.tab) {
+                            // Selects the first item in the list if there is no one selected.
+                            if (!suggestionList.selected) {
+                                suggestionList.select(0);
+                            }
+                            handled = scope.addSuggestion();
+                        }
+                        else if (key === KEYS.enter) {
+                            if (!suggestionList.selected) {
+                                // Prevents duplicate tags by selecting the current in case of a match.
+                                if (suggestionList.items[0].name.toLowerCase() === tagsInput.getCurrentTagText().toLowerCase()) {
+                                    suggestionList.select(0);
+                                }
+                            }
                             handled = scope.addSuggestion();
                         }
                     }
                     else {
                         if (key === KEYS.down && scope.options.loadOnDownArrow) {
                             suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                            handled = true;
+                        }
+                        // The 'tab' key add a new tag only when no options listed in the list and the current text is not empty.
+                        if (key === KEYS.tab && tagsInput.getCurrentTagText().trim().length > 0) {
+                            tagsInput.addNewTag(tagsInput.getCurrentTagText());
                             handled = true;
                         }
                     }
