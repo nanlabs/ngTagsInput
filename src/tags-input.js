@@ -330,6 +330,12 @@ tagsInput.directive('tagsInput', function($timeout, $document, tagsInputConfig) 
                     });
                 });
 
+            if (attrs.focus) {
+                $timeout(function() {
+                    input[0].focus();
+                }, 500);
+            }
+
             element.find('div').on('click', function() {
                 input[0].focus();
             });

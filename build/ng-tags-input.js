@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2015 Michael Benford
  * License: MIT
  *
- * Generated at 2015-01-07 13:13:40 -0300
+ * Generated at 2015-02-15 11:14:26 -0300
  */
 (function() {
 'use strict';
@@ -419,6 +419,12 @@ tagsInput.directive('tagsInput', ["$timeout","$document","tagsInputConfig", func
                         }
                     });
                 });
+
+            if (attrs.focus) {
+                $timeout(function() {
+                    input[0].focus();
+                }, 500);
+            }
 
             element.find('div').on('click', function() {
                 input[0].focus();
