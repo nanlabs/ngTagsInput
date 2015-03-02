@@ -222,20 +222,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, tagsInpu
                             suggestionList.reset();
                             handled = true;
                         }
-                        else if (key === KEYS.tab) {
-                            // Selects the first item in the list if there is no one selected.
-                            if (!suggestionList.selected) {
-                                suggestionList.select(0);
-                            }
-                            handled = scope.addSuggestion();
-                        }
-                        else if (key === KEYS.enter) {
-                            if (!suggestionList.selected) {
-                                // Prevents duplicate tags by selecting the current in case of a match.
-                                if (suggestionList.items[0].name.toLowerCase() === tagsInput.getCurrentTagText().toLowerCase()) {
-                                    suggestionList.select(0);
-                                }
-                            }
+                        else if (key === KEYS.enter || key === KEYS.tab) {
                             handled = scope.addSuggestion();
                         }
                     }
